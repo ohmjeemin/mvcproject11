@@ -48,7 +48,7 @@
 	function connect(){
 		
 		var socket = null;
-		var ws = new WebSocket("ws://localhost:8080/socket");
+		var ws = new WebSocket("ws://localhost:8080/");
 		//socket이 생성되면 socket에 넣어라
 		socket = ws;
 		

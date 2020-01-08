@@ -4,6 +4,8 @@
 		xmlns:context="http://www.springframework.org/schema/context"
 		xmlns:mvc="http://www.springframework.org/schema/mvc"
 		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:websocket="http://www.springframework.org/schema/websocket"
+		
 		xsi:schemaLocation=
 				"http://www.springframework.org/schema/beans 
 				http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -12,7 +14,13 @@
 				http://www.springframework.org/schema/context/spring-context.xsd
 				
 				http://www.springframework.org/schema/mvc
-				http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+				http://www.springframework.org/schema/mvc/spring-mvc.xsd
+				
+				http://www.springframework.org/schema/websocket
+				http://www.springframework.org/schema/websocket/spring-websocket.xsd"
+				
+				
+				>
     
    <!-- :: 공통적인 사항을 설정한 common-servlet.xml 사용. -->
        
@@ -86,5 +94,18 @@
 		<property name="defaultErrorView"	value="/common/error.jsp" />
 		
 	</bean>
+	
+	
+	<!-- websocket handler -->
+	<bean id="replyEchoHandler" class="com.jade.swp.handler.ReplyEchoHandler"/>
+	
+	<!-- websocket session에 http session을 올려주기 위해 (기본적으로 websocket은 httpsession을 안가지고 있어)-->
+	<websocket:handlers>
+		<websocket:mapping handler="replyEchoHandler" path="/socket"/>
+		<websocket:handshake-interceptors>
+			<bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor"/>
+			
+		</websocket:handshake-interceptors>
+	</websocket:handlers>
 	
 </beans>

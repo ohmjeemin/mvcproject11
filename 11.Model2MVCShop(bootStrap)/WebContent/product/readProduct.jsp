@@ -45,8 +45,49 @@
 			 $("button.btn.btn-default").on("click" , function() {
 					history.go(-1);
 			});
+			 
+			$('#btnSend').on('click', function(evt){
+				evt.preventDefault();
+				if(socket.readyState!==1) return;
+				
+					let msg = $('input#msg').val();
+					socket.send(msg);	
+			});
 			
+			connect();
 		});
+		
+	</script>
+
+	<script>
+	//websocket을 연결하고 
+	function connect(){
+		
+		var socket = null;
+		var ws = new WebSocket("ws://localhost:8080/product/getProduct?prodNo=10001");
+		//socket이 생성되면 socket에 넣어라
+		socket = ws;
+		
+		//onopen : eventHandler (event가 발생했을때)
+		ws.onopen = function(){
+			console.log('Info: connection opened. ');
+			
+		};
+		//message가 왔을때
+		ws.onmessage = function(event){
+			console.log(event.data+ '\n');
+		};
+		
+		ws.onclose = function(event){
+			console.log('Info:connection closed.');
+			//close가 되면 1초에 한번씩 재연결 시도해
+			//setTimeout( function(){ connect(); }, 1000);
+		};
+		
+		ws.onerror = function(error){
+			console.log('Info:error.',error);
+		};
+	}
 		
 	</script>
 
@@ -115,7 +156,14 @@
 	  		
 	  		</div>
 	  		
+	  		
 	  			
+		</div>
+		
+		<!-- input에 있는 message를 socket에 보내겠다 -->
+		<div class ="well">
+			<input type="text" id="msg" value="1212" class="form-control"/>
+			<button id="btnSend" class="btn btn-primary">send message</button>
 		</div>
 		
 		<br/>
